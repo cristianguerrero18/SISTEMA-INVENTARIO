@@ -1,14 +1,14 @@
 import { method as MovimientosController} from "../controllers/movimientos.controllers.js";
 import Router from "express"
-
+import {verificarToken} from "../middlewares/auth.js";
 const router  =  Router();
 
 
-router.get("/",MovimientosController.getMovimientos);
-router.post("/" , MovimientosController.postMovimientos);
-router.put("/:id",MovimientosController.editarMovimientos);
-router.delete("/:id",MovimientosController.deleteMovimientos);
-router.get("/:id",MovimientosController.getMovid);
+router.get("/",verificarToken ,MovimientosController.getMovimientos);
+router.post("/" ,verificarToken, MovimientosController.postMovimientos);
+router.put("/:id", verificarToken,MovimientosController.editarMovimientos);
+router.delete("/:id", verificarToken,MovimientosController.deleteMovimientos);
+router.get("/:id", verificarToken,MovimientosController.getMovid);
 
 export default router;
 

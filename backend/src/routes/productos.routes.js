@@ -10,6 +10,6 @@ router.put("/:id", verificarToken, method.putProductos);
 router.delete("/:id",verificarToken, method.deleteProductos);
 router.get("/:id", verificarToken, method.obtenerProductoPorId);
 router.get("/categoria/:id_categoria", verificarToken, method.obtenerProductoPorCategorias);
-router.get("/producto/nombre",method.getProdNom);
+router.get("/producto/nombre", verificarToken,method.getProdNom);
 
 export default router;
