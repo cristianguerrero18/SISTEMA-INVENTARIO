@@ -1,0 +1,392 @@
+ /* CSS Variables for consistent theming */
+ :root {
+    --primary: #2563eb;
+    --secondary: #1e40af;
+    --accent: #f59e0b;
+    --background: #f8fafc;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s ease;
+  }
+
+  /* Reset and base styles */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background: var(--background);
+    min-height: 100vh;
+  }
+
+  /* Dashboard container */
+  .dashboard-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .dashboard-container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top left, rgba(37, 99, 235, 0.1) 0%, transparent 50%);
+    z-index: 0;
+  }
+
+  /* Header */
+  .dashboard-header {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 1.25rem 0;
+  }
+
+  .header-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo-section {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    background: var(--primary);
+    border-radius: 12px;
+    transition: var(--transition);
+  }
+
+  .logo-container:hover {
+    transform: scale(1.05);
+  }
+
+  .logo-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    color: white;
+  }
+
+  .brand-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  .brand-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .user-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .welcome-text {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .logout-button {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+  }
+
+  .logout-button:hover {
+    background: var(--secondary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .logout-button i {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: white;
+  }
+
+  /* Main content */
+  .dashboard-main {
+    flex: 1;
+    padding: 2.5rem 0;
+    position: relative;
+    z-index: 10;
+  }
+
+  .dashboard-grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+
+  /* Module cards */
+  .module-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    padding: 1.75rem;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .module-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .module-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .module-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  }
+
+  .module-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+
+  .module-icon i {
+    width: 2rem;
+    height: 2rem;
+    color: white;
+  }
+
+  .module-content {
+    flex: 1;
+  }
+
+  .module-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .module-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 400;
+  }
+
+  .module-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--text-secondary);
+    transition: var(--transition);
+  }
+
+  .module-card:hover .module-arrow {
+    color: var(--primary);
+    transform: translateX(6px);
+  }
+
+  .module-arrow i {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: inherit;
+  }
+
+  /* Footer */
+  .dashboard-footer {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1.5rem 0;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+  }
+
+  /* Responsive design */
+  @media (max-width: 1024px) {
+    .dashboard-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .header-content {
+      padding: 0 1rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .header-content {
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+    }
+
+    .user-section {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+      padding: 0 1rem;
+    }
+
+    .dashboard-main {
+      padding: 1.5rem 0;
+    }
+
+    .module-card {
+      padding: 1.25rem;
+    }
+
+    .module-icon {
+      width: 3.5rem;
+      height: 3.5rem;
+    }
+
+    .module-icon i {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+
+    .brand-title {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .logo-section {
+      gap: 1rem;
+    }
+
+    .logo-container {
+      width: 3rem;
+      height: 3rem;
+    }
+
+    .logo-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+    }
+
+    .module-card {
+      flex-direction: column;
+      text-align: center;
+      gap: 1.25rem;
+      padding: 1rem;
+    }
+
+    .module-arrow {
+      transform: rotate(90deg);
+    }
+
+    .module-card:hover .module-arrow {
+      transform: rotate(90deg) translateX(6px);
+    }
+
+    .welcome-text {
+      font-size: 0.85rem;
+    }
+
+    .logout-button {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+  }

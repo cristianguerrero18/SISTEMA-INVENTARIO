@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventario | Productos </title>
+    <script>
+      // 🚨 Ejecutar la validación inmediatamente
+      const token = sessionStorage.getItem("token");
+      const rol = sessionStorage.getItem("rol");
+
+      if (!token || Number(rol) !== 1) {
+        // Redirigir ANTES de renderizar nada
+        window.location.replace("login.html");
+      }
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="../css/adminusers.css" />
+  </head>
+  <body>
+    <div class="header">
+      <button class="volver-btn" onclick="window.location.href='admin.html'">
+        <i data-lucide="arrow-left"></i> Volver
+      </button>
+      <h2><i data-lucide="users"></i> Lista de Productos</h2>
+    </div>
+
+    <!-- Barra de filtro -->
+    <div class="actions-bar">
+      <button class="btn-agregar" id="openModal">
+        <i data-lucide="plus-circle"></i> Agregar Producto
+      </button>
+
+      <div class="search-box">
+        <i data-lucide="search"></i>
+        <input
+          type="text"
+          id="searchProd"
+          placeholder="Buscar producto por nombre o ID..."
+        />
+      </div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="tabla-contenedor">
+      <table id="table-produ">
+        <thead>
+          <tr>
+            <th><i data-lucide="hash"></i> ID</th>
+            <th><i data-lucide="user"></i> Nombre</th>
+            <th><i data-lucide="file-text"></i> Descripción</th>
+            <th><i data-lucide="package"></i> Stock</th>
+            <th><i data-lucide="ruler"></i> Unidad Medida</th>
+            <th><i data-lucide="tag"></i> Precio Unitario</th>
+            <th><i data-lucide="layers"></i> Categoría</th>
+            <th><i data-lucide="truck"></i> Proveedor</th>
+            <th><i data-lucide="settings"></i> Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Se llena automáticamente -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="modal" id="userModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i data-lucide="user-plus"></i> Nuevo Producto</h3>
+          <span class="close" id="closeModal">&times;</span>
+        </div>
+        <form>
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" />
+          <label for="descripcion">Descripcion</label>
+          <input required id="descripcion" type="text" />
+          <label for="stock">Stock</label>
+          <input required id="stock" type="text" />
+          <label for="und_medida">Und_medida</label>
+          <input type="text" required id="und_medida" />
+          <label for="precio">Precio</label>
+          <input type="text" required id="precio" />
+          <label for="categoria">Categoria</label>
+          <select required id="categoria"></select>
+          <label for="proveedor">Proveedor</label>
+          <select required id="proveedor"></select>
+
+          <button type="submit" id="btn-guardar">
+            <i data-lucide="save"></i> Guardar
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!--formulario de editar-->
+
+    <div class="modal" id="editUserModal">
+      <div class="modal-content-producto">
+        <div class="modal-header">
+          <h3><i data-lucide="user-cog"></i> Editar Producto</h3>
+          <span class="close" id="closeEditModal">&times;</span>
+        </div>
+        <form>
+          <!-- Campo oculto para guardar el ID del usuario -->
+          <label for="edit-id">ID</label>
+          <input type="text" id="edit-id" readonly /> 
+          <label for="edit-nombre">Nombre</label>
+          <input
+            type="text"
+            id="edit-nombre"
+          />
+          <label for="edit-desc">Descripcion</label>
+          <input type="text" id="edit-desc" required>
+          <label for="edit-stock">Stock</label>
+          <input type="text" required id="edit-stock" />
+          <label for="edit-und_medida">Und_medida</label>
+          <input
+            required
+            id="edit-und_medida"
+          />
+          <label for="edit-precio">Precio</label>
+          <input type="text" id="edit-precio" required>
+          <label for="edit-categoria">Categoria</label>
+          <select required id="edit-categoria"></select>
+          <label for="edit-proveedor">Proveedor</label>
+          <select required id="edit-proveedor"></select>
+          <button type="submit" id="btn-actualizar">
+            <i data-lucide="save"></i> Actualizar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+    <script>
+      lucide.createIcons();
+
+      const modal = document.getElementById("userModal");
+      const openModal = document.getElementById("openModal");
+      const closeModal = document.getElementById("closeModal");
+
+      openModal.addEventListener("click", () => (modal.style.display = "flex"));
+      closeModal.addEventListener(
+        "click",
+        () => (modal.style.display = "none")
+      );
+      window.addEventListener("click", (e) => {
+        if (e.target === modal) modal.style.display = "none";
+      });
+    </script>
+    
+    <script type="module" src="../js/productos.js"></script>
+  </body>
+</html>

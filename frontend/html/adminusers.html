@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventario | Usuarios</title>
+    <script>
+      const token = sessionStorage.getItem("token");
+      const rol = sessionStorage.getItem("rol");
+
+      if (!token || Number(rol) !== 1) {
+        window.location.replace("login.html");
+      }
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="../css/adminusers.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <button class="volver-btn" onclick="window.location.href='admin.html'">
+          <i data-lucide="arrow-left"></i> Volver
+        </button>
+        <h2><i data-lucide="users"></i> Lista de Usuarios</h2>
+      </div>
+
+      <div class="actions-bar">
+        <button class="btn-agregar" id="openModal">
+          <i data-lucide="plus-circle"></i> Agregar Usuario
+        </button>
+
+        <div class="search-box">
+          <i data-lucide="search"></i>
+          <input 
+            type="text" 
+            id="searchUser" 
+            placeholder="Buscar usuario por nombre, usuario o ID..."
+          >
+        </div>
+      </div>
+      
+      <div class="tabla-contenedor">
+        <table id="table-users">
+          <thead>
+            <tr>
+              <th><i data-lucide="hash"></i> ID</th>
+              <th><i data-lucide="user"></i> Nombre</th>
+              <th><i data-lucide="mail"></i> Rol</th>
+              <th><i data-lucide="shield"></i> Usuario</th>
+              <th><i data-lucide="lock"></i> Clave</th>
+              <th><i data-lucide="settings"></i> Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!--se llena automaticamente-->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="modal" id="userModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3><i data-lucide="user-plus"></i> Nuevo Usuario</h3>
+            <span class="close" id="closeModal">&times;</span>
+          </div>
+          <form id="addUserForm">
+            <label for="nombre">Nombre completo</label>
+            <input
+              type="text"
+              placeholder="Nombre completo"
+              required
+              id="nombre"
+            />
+            <label for="roles">Rol</label>
+            <select required id="roles"></select>
+            <label for="usuario">Usuario</label>
+            <input type="text" placeholder="Usuario" required id="usuario" />
+            <label for="password">Clave</label>
+            <input type="password" placeholder="Clave" required id="password" />
+            <button type="submit" id="btn-guardar">
+              <i data-lucide="save"></i> Guardar
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="modal" id="editUserModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3><i data-lucide="user-cog"></i> Editar Usuario</h3>
+            <span class="close" id="closeEditModal">&times;</span>
+          </div>
+          <form id="editUserForm">
+            <label for="edit-id">ID</label>
+            <input type="text" id="edit-id" readonly /> 
+            <label for="edit-nombre">Nombre completo</label>
+            <input
+              type="text"
+              placeholder="Nombre completo"
+              required
+              id="edit-nombre"
+            />
+            <label for="edit-roles">Rol</label>
+            <select id="edit-roles" required></select>
+            <label for="edit-usuario">Usuario</label>
+            <input type="text" placeholder="Usuario" required id="edit-usuario" />
+            <label for="edit-password">Clave</label>
+            <input
+              type="password"
+              placeholder="Clave"
+              required
+              id="edit-password"
+            />
+            <button type="submit" id="btn-actualizar">
+              <i data-lucide="save"></i> Actualizar
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      lucide.createIcons();
+
+      const modal = document.getElementById("userModal");
+      const editModal = document.getElementById("editUserModal");
+      const openModal = document.getElementById("openModal");
+      const closeModal = document.getElementById("closeModal");
+      const closeEditModal = document.getElementById("closeEditModal");
+
+      openModal.addEventListener("click", () => (modal.style.display = "flex"));
+      closeModal.addEventListener("click", () => (modal.style.display = "none"));
+      closeEditModal.addEventListener("click", () => (editModal.style.display = "none"));
+
+      window.addEventListener("click", (e) => {
+        if (e.target === modal) modal.style.display = "none";
+        if (e.target === editModal) editModal.style.display = "none";
+      });
+    </script>
+    <script type="module" src="../js/usuarios.js"></script>
+  </body>
+</html>

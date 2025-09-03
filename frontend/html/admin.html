@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventario | Homepage</title>
+  <link rel="stylesheet" href="../css/admin.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script>
+    const token = sessionStorage.getItem("token");
+    const rol = sessionStorage.getItem("rol");
+
+    if (!token || Number(rol) !== 1) {
+      alert("Acceso denegado. Debes iniciar sesión como admin.");
+      window.location.href = "login.html";
+    }
+  </script>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Header -->
+    <header class="dashboard-header">
+      <div class="header-content">
+        <div class="logo-section">
+          <div class="logo-container">
+            <i data-lucide="chef-hat" class="logo-icon"></i>
+          </div>
+          <div class="brand-info">
+            <h1 class="brand-title">Systems Solutions</h1>
+            <p class="brand-subtitle">Panel de Administración</p>
+          </div>
+        </div>
+        <div class="user-section">
+          <span class="welcome-text">Bienvenido, Admin</span>
+          <a href="javascript:void(0)" onclick="logout()" class="logout-button">
+            <i data-lucide="log-out"></i>
+            Salir
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+      <div class="dashboard-grid">
+        <!-- Categorías -->
+        <a href="./admincategorias.html" class="module-card">
+          <div class="module-icon">
+            <i data-lucide="folder"></i>
+          </div>
+          <div class="module-content">
+            <h3 class="module-title">Categorías</h3>
+            <p class="module-description">Gestionar categorías de productos</p>
+          </div>
+          <div class="module-arrow">
+            <i data-lucide="chevron-right"></i>
+          </div>
+        </a>
+
+        <!-- Movimientos -->
+        <a href="./adminmovimientos.html" class="module-card">
+          <div class="module-icon">
+            <i data-lucide="activity"></i>
+          </div>
+          <div class="module-content">
+            <h3 class="module-title">Movimientos</h3>
+            <p class="module-description">Control de entradas y salidas</p>
+          </div>
+          <div class="module-arrow">
+            <i data-lucide="chevron-right"></i>
+          </div>
+        </a>
+
+        <!-- Productos -->
+        <a href="./adminproductos.html" class="module-card">
+          <div class="module-icon">
+            <i data-lucide="package"></i>
+          </div>
+          <div class="module-content">
+            <h3 class="module-title">Productos</h3>
+            <p class="module-description">Inventario de productos</p>
+          </div>
+          <div class="module-arrow">
+            <i data-lucide="chevron-right"></i>
+          </div>
+        </a>
+
+        <!-- Proveedores -->
+        <a href="./adminproveedores.html" class="module-card">
+          <div class="module-icon">
+            <i data-lucide="truck"></i>
+          </div>
+          <div class="module-content">
+            <h3 class="module-title">Proveedores</h3>
+            <p class="module-description">Gestión de proveedores</p>
+          </div>
+          <div class="module-arrow">
+            <i data-lucide="chevron-right"></i>
+          </div>
+        </a>
+
+        <!-- Usuarios -->
+        <a href="./adminusers.html" class="module-card">
+          <div class="module-icon">
+            <i data-lucide="users"></i>
+          </div>
+          <div class="module-content">
+            <h3 class="module-title">Usuarios</h3>
+            <p class="module-description">Administrar usuarios del sistema</p>
+          </div>
+          <div class="module-arrow">
+            <i data-lucide="chevron-right"></i>
+          </div>
+        </a>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+      <p>&copy; 2025 RestaurantePro. Sistema de Inventario Profesional.</p>
+    </footer>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    function logout() {
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("rol");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

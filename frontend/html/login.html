@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventario | Login</title>
+    <link rel="stylesheet" href="../css/login.css" />
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  </head>
+  <body>
+    <div class="login-container">
+      <!-- Background pattern -->
+      <div class="background-pattern"></div>
+
+      <div class="login-wrapper">
+        <!-- Logo and branding -->
+        <div class="branding">
+          <div class="logo-container">
+            <i data-lucide="chef-hat" class="logo-icon"></i>
+          </div>
+          <h1 class="brand-title">Systems Solutions</h1>
+          <p class="brand-subtitle">Sistema de Inventario</p>
+        </div>
+
+        <!-- Login form -->
+        <div class="login-card">
+          <div class="card-header">
+            <h2 class="card-title">Iniciar Sesión</h2>
+            <p class="card-description">
+              Ingresa tus credenciales para acceder al sistema
+            </p>
+          </div>
+
+          <div class="card-content">
+            <form id="form" class="login-form">
+              <div class="form-group">
+                <label for="usuario" class="form-label">Usuario</label>
+                <div class="input-container">
+                  <i data-lucide="user" class="input-icon"></i>
+                  <input
+                    type="text"
+                    id="usuario"
+                    name="usuario"
+                    placeholder="Ingrese su usuario"
+                    class="form-input"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="clave" class="form-label">Contraseña</label>
+                <div class="input-container">
+                  <i data-lucide="lock" class="input-icon"></i>
+                  <input
+                    type="password"
+                    id="clave"
+                    name="clave"
+                    placeholder="Ingrese su contraseña"
+                    class="form-input"
+                    required
+                  />
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    onclick="togglePassword()"
+                  >
+                    <i data-lucide="eye" id="eye-icon"></i>
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" class="submit-button">
+                Ingresar al Sistema
+              </button>
+            </form>
+
+            <div class="forgot-password">
+              <button type="button" class="forgot-button">
+                ¿Olvidaste tu contraseña?
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <p>© 2024 RestaurantePro. Sistema de Inventario Profesional</p>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="../js/login.js"></script>
+    <script>
+      lucide.createIcons();
+      // login.js
+      function togglePassword() {
+        const passwordInput = document.getElementById("clave");
+        const eyeIcon = document.getElementById("eye-icon");
+
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          eyeIcon.setAttribute("data-lucide", "eye-off");
+        } else {
+          passwordInput.type = "password";
+          eyeIcon.setAttribute("data-lucide", "eye");
+        }
+        // Re-render Lucide icons after changing the data-lucide attribute
+        lucide.createIcons();
+      }
+    </script>
+  </body>
+</html>
