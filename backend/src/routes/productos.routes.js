@@ -4,7 +4,7 @@ import { verificarToken } from "../middlewares/auth.js";
 
 const router = Router();
 
-router.get("/",method.getProductos);
+router.get("/",verificarToken,method.getProductos);
 router.post("/", verificarToken, method.postProductos);
 router.put("/:id", verificarToken, method.putProductos);
 router.delete("/:id",verificarToken, method.deleteProductos);
