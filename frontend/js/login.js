@@ -9,6 +9,7 @@ document.getElementById("form").addEventListener("submit", async (e) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ usuario, clave }),
+      
     });
     const data = await response.json();
     if (data.success) {

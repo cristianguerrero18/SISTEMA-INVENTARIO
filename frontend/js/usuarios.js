@@ -104,17 +104,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Eliminar usuario
     if (e.target.classList.contains("btn-eliminar")) {
-      if (confirm("¿Seguro que desea eliminar?")) {
-        try {
-          await apiRequest(`http://localhost:7000/api/usuarios/${id}`, "DELETE");
-          usuariosData = usuariosData.filter((u) => u.id_usuario != id);
-          renderTable(usuariosData);
-          alert("Usuario eliminado correctamente");
-        } catch (err) {
-          console.error(err);
-          alert("Error al eliminar usuario");
+      Swal.fire({
+        title: "¿Está seguro?",
+        text: "El usuario será eliminado permanentemente.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#dc3545",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await apiRequest(`http://localhost:7000/api/usuarios/${id}`, "DELETE");
+            usuariosData = usuariosData.filter((u) => u.id_usuario != id);
+            renderTable(usuariosData);
+            Swal.fire("Eliminado", "Usuario eliminado correctamente.", "success");
+          } catch (err) {
+            console.error(err);
+            Swal.fire("Error", "No se pudo eliminar el usuario.", "error");
+          }
         }
-      }
+      });
     }
 
     // Editar usuario
@@ -123,13 +134,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const usuario = await apiRequest(`http://localhost:7000/api/usuarios/${id}`);
         document.getElementById("edit-id").value = usuario.id_usuario;
         document.getElementById("edit-nombre").value = usuario.nombre;
-        document.getElementById("edit-roles").value = usuario.rol_id; // 👈 ahora sí selecciona
+        document.getElementById("edit-roles").value = usuario.rol_id;
         document.getElementById("edit-usuario").value = usuario.usuario;
         document.getElementById("edit-password").value = usuario.clave;
         editModal.style.display = "flex";
       } catch (err) {
         console.error(err);
-        alert("Error al cargar usuario.");
+        Swal.fire("Error", "No se pudo cargar el usuario.", "error");
       }
     }
   });
@@ -150,11 +161,18 @@ document.addEventListener("DOMContentLoaded", () => {
       const creado = await apiRequest("http://localhost:7000/api/usuarios/", "POST", nuevo);
       usuariosData.push(creado);
       renderTable(usuariosData);
-      alert("Usuario creado exitosamente");
-      location.reload(); // 👈 opcional, si tu backend no devuelve el objeto completo
+
+      Swal.fire({
+        icon: "success",
+        title: "Usuario creado",
+        text: "El usuario se registró exitosamente.",
+        timer: 2000,
+        showConfirmButton: false
+      }).then(() => location.reload());
+
     } catch (err) {
       console.error(err);
-      alert("Error al crear usuario.");
+      Swal.fire("Error", "No se pudo crear el usuario.", "error");
     }
   });
 
@@ -177,10 +195,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (index !== -1) usuariosData[index] = { ...usuariosData[index], ...actualizado };
       renderTable(usuariosData);
       editModal.style.display = "none";
-      alert("Usuario editado correctamente");
+
+      Swal.fire("Actualizado", "Usuario editado correctamente.", "success");
     } catch (err) {
       console.error(err);
-      alert("Error al editar usuario.");
+      Swal.fire("Error", "No se pudo editar el usuario.", "error");
     }
   });
 

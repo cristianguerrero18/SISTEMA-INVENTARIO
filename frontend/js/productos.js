@@ -99,23 +99,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Eliminar
     if (e.target.classList.contains("btn-eliminar")) {
-      if (confirm("¿Seguro que desea eliminar este producto?")) {
-        try {
-          await apiRequest(`http://localhost:7000/api/productos/${id}`, "DELETE");
-          proData = proData.filter((p) => p.id_producto != id);
-          renderTable(proData);
-          alert("Producto eliminado correctamente");
-        } catch (err) {
-          console.error(err);
-          alert("Error al eliminar producto");
+      Swal.fire({
+        title: "¿Está seguro?",
+        text: "No podrá revertir esta acción",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await apiRequest(`http://localhost:7000/api/productos/${id}`, "DELETE");
+            proData = proData.filter((p) => p.id_producto != id);
+            renderTable(proData);
+            Swal.fire("Eliminado", "El producto fue eliminado correctamente", "success");
+          } catch (err) {
+            console.error(err);
+            Swal.fire("Error", "No se pudo eliminar el producto", "error");
+          }
         }
-      }
+      });
     }
 
     // Editar
     if (e.target.classList.contains("btn-editar")) {
       try {
-        // cargar selects
         await loadOptions("http://localhost:7000/api/categorias/nombre/categoria", editCategoria);
         await loadOptions("http://localhost:7000/api/proveedores/nombre/proveedor", editProveedor);
 
@@ -132,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
         editModal.style.display = "flex";
       } catch (err) {
         console.error(err);
-        alert("Error al cargar producto.");
+        Swal.fire("Error", "No se pudo cargar el producto", "error");
       }
     }
   });
@@ -156,11 +166,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const creado = await apiRequest("http://localhost:7000/api/productos/", "POST", nuevo);
       proData.push(creado);
       renderTable(proData);
-      alert("Producto creado exitosamente");
-      location.reload();
+      Swal.fire("Éxito", "Producto creado exitosamente", "success");
     } catch (err) {
       console.error(err);
-      alert("Error al crear producto.");
+      Swal.fire("Error", "No se pudo crear el producto", "error");
     }
   });
 
@@ -186,10 +195,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (index !== -1) proData[index] = { ...proData[index], ...actualizado };
       renderTable(proData);
       editModal.style.display = "none";
-      alert("Producto editado correctamente");
+      Swal.fire("Éxito", "Producto actualizado correctamente", "success");
     } catch (err) {
       console.error(err);
-      alert("Error al editar producto.");
+      Swal.fire("Error", "No se pudo actualizar el producto", "error");
     }
   });
 

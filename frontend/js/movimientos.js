@@ -4,8 +4,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const idUsuario = sessionStorage.getItem("id_usuario"); // 🔹 Recuperar usuario logueado
 
   if (!idUsuario) {
-    alert("⚠️ No se encontró el usuario en la sesión. Vuelve a iniciar sesión.");
-    location.href = "index.html"; // Redirige al login si no hay usuario
+    Swal.fire({
+      icon: "warning",
+      title: "Sesión expirada",
+      text: "⚠️ No se encontró el usuario en la sesión. Vuelve a iniciar sesión.",
+      confirmButtonText: "Aceptar",
+    }).then(() => {
+      location.href = "index.html";
+    });
     return;
   }
 
@@ -105,17 +111,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Eliminar
     if (e.target.classList.contains("btn-eliminar")) {
-      if (confirm("¿Seguro que desea eliminar este movimiento?")) {
-        try {
-          await apiRequest(`http://localhost:7000/api/movimientos/${id}`, "DELETE");
-          movData = movData.filter((m) => m.id_movimiento != id);
-          renderTable(movData);
-          alert("Movimiento eliminado correctamente");
-        } catch (err) {
-          console.error(err);
-          alert("Error al eliminar movimiento");
+      Swal.fire({
+        title: "¿Seguro que desea eliminar este movimiento?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await apiRequest(`http://localhost:7000/api/movimientos/${id}`, "DELETE");
+            movData = movData.filter((m) => m.id_movimiento != id);
+            renderTable(movData);
+            Swal.fire("Eliminado", "Movimiento eliminado correctamente", "success");
+          } catch (err) {
+            console.error(err);
+            Swal.fire("Error", "No se pudo eliminar el movimiento", "error");
+          }
         }
-      }
+      });
     }
 
     // Editar
@@ -133,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
         editModal.style.display = "flex";
       } catch (err) {
         console.error(err);
-        alert("Error al cargar movimiento.");
+        Swal.fire("Error", "No se pudo cargar el movimiento", "error");
       }
     }
   });
@@ -150,18 +164,26 @@ document.addEventListener("DOMContentLoaded", () => {
       cantidad: document.getElementById("cantidad").value.trim() || "0.00",
       fecha: hoy,
       observacion: document.getElementById("observacion").value.trim(),
-      id_usuario: parseInt(idUsuario), // 🔹 Usuario logueado
+      id_usuario: parseInt(idUsuario),
     };
 
     try {
       const creado = await apiRequest("http://localhost:7000/api/movimientos/", "POST", nuevo);
       movData.push(creado);
       renderTable(movData);
-      alert("Movimiento creado exitosamente");
+
+      Swal.fire({
+        icon: "success",
+        title: "Movimiento creado",
+        text: "El movimiento fue registrado exitosamente",
+        timer: 2000,
+        showConfirmButton: false,
+        
+      });
       location.reload();
     } catch (err) {
       console.error(err);
-      alert("Error al crear movimiento.");
+      Swal.fire("Error", "No se pudo crear el movimiento", "error");
     }
   });
 
@@ -170,14 +192,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================
   btnActualizar.addEventListener("click", async (e) => {
     e.preventDefault();
-    const hoy = new Date().toISOString().split("T")[0]; 
     const id = document.getElementById("edit-id").value;
     const actualizado = {
       id_producto: parseInt(editProducto.value),
       tipo: document.getElementById("edit-tipo").value.trim(),
       cantidad: document.getElementById("edit-cantidad").value.trim() || "0.00",
       observacion: document.getElementById("edit-observacion").value.trim(),
-      id_usuario: parseInt(idUsuario), // 🔹 Usuario logueado
+      id_usuario: parseInt(idUsuario),
     };
 
     try {
@@ -186,10 +207,17 @@ document.addEventListener("DOMContentLoaded", () => {
       if (index !== -1) movData[index] = { ...movData[index], ...actualizado };
       renderTable(movData);
       editModal.style.display = "none";
-      alert("Movimiento editado correctamente");
+
+      Swal.fire({
+        icon: "success",
+        title: "Movimiento actualizado",
+        text: "El movimiento fue editado correctamente",
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (err) {
       console.error(err);
-      alert("Error al editar movimiento.");
+      Swal.fire("Error", "No se pudo actualizar el movimiento", "error");
     }
   });
 

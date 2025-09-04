@@ -3,25 +3,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const guardar = document.getElementById("btn-guardar");
   const searchInput = document.getElementById("searchUser");
   const token = sessionStorage.getItem("token");
-  const notification = document.getElementById("notification");
 
   const editModal = document.getElementById("editUserModal");
   const closeEditModal = document.getElementById("closeEditModal");
   const btnActualizar = document.getElementById("btn-actualizar");
 
   let catData = []; // almacenamiento en memoria
-
-  // ==========================
-  // 🔹 Función para mostrar notificaciones
-  // ==========================
-  function showNotification(message, type = "success") {
-    notification.textContent = message;
-    notification.className = `notification ${type}`;
-    notification.style.display = "block";
-    setTimeout(() => {
-      notification.style.display = "none";
-    }, 3500);
-  }
 
   // ==========================
   // 🔹 Función API Fetch genérica
@@ -53,9 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${c.nombre}</td>
           <td>${c.descripcion}</td>
           <td>
-          <button class="btn-editar" data-id="${c.id_categoria}" style="padding: 8px 12px; background: #ff6200; color: white; border: none; border-radius: 6px; cursor: pointer; margin-right: 8px; font-family: 'Inter', sans-serif; font-weight: 600; transition: background 0.3s ease, transform 0.2s ease;">Editar</button>
-          <button class="btn-eliminar" data-id="${c.id_categoria}" style="padding: 8px 12px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 600; transition: background 0.3s ease, transform 0.2s ease;">Eliminar</button>
-        </td>
+            <button class="btn-editar" data-id="${c.id_categoria}" 
+              style="padding: 8px 12px; background: #ff6200; color: white; border: none; border-radius: 6px; cursor: pointer; margin-right: 8px; font-family: 'Inter', sans-serif; font-weight: 600; transition: background 0.3s ease, transform 0.2s ease;">Editar</button>
+            <button class="btn-eliminar" data-id="${c.id_categoria}" 
+              style="padding: 8px 12px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 600; transition: background 0.3s ease, transform 0.2s ease;">Eliminar</button>
+          </td>
         </tr>
       `;
       table.insertAdjacentHTML("beforeend", row);
@@ -71,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
       renderTable(catData);
     } catch (err) {
       console.error("Error al cargar categorías:", err);
-      showNotification("Error al cargar categorías.", "error");
+      Swal.fire("Error", "Error al cargar categorías.", "error");
     }
   }
 
@@ -91,23 +80,35 @@ document.addEventListener("DOMContentLoaded", () => {
         editModal.style.display = "flex";
       } catch (err) {
         console.error(err);
-        showNotification("No se pudo cargar la categoría.", "error");
+        Swal.fire("Error", "No se pudo cargar la categoría.", "error");
       }
     }
 
-    // Eliminar
+    // Eliminar con Swal
     if (e.target.classList.contains("btn-eliminar")) {
-      if (confirm("¿Seguro que desea eliminar?")) {
-        try {
-          await apiRequest(`http://localhost:7000/api/categorias/${id}`, "DELETE");
-          showNotification("Categoría eliminada correctamente.", "success");
-          catData = catData.filter((c) => c.id_categoria != id);
-          renderTable(catData);
-        } catch (err) {
-          console.error(err);
-          showNotification("Error al eliminar la categoría.", "error");
+      Swal.fire({
+        title: "¿Estás seguro?",
+        text: "No podrás deshacer esta acción",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#dc3545",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await apiRequest(`http://localhost:7000/api/categorias/${id}`, "DELETE");
+            catData = catData.filter((c) => c.id_categoria != id);
+            renderTable(catData);
+
+            Swal.fire("Eliminada", "La categoría ha sido eliminada.", "success");
+          } catch (err) {
+            console.error(err);
+            Swal.fire("Error", "No se pudo eliminar la categoría.", "error");
+          }
         }
-      }
+      });
     }
   });
 
@@ -120,19 +121,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const descripcion = document.getElementById("descripcion").value.trim();
 
     if (!nombre || !descripcion) {
-      showNotification("Complete todos los campos.", "warning");
+      Swal.fire("Atención", "Complete todos los campos.", "warning");
       return;
     }
 
     try {
       const nueva = await apiRequest("http://localhost:7000/api/categorias/", "POST", { nombre, descripcion });
-      showNotification("Categoría creada exitosamente.", "success");
       catData.push(nueva);
       renderTable(catData);
-      location.reload();
+
+      Swal.fire({
+        icon: "success",
+        title: "Categoría creada",
+        text: "Categoría creada exitosamente.",
+        showConfirmButton: false,
+        timer: 2000
+      }).then(() => {
+        location.reload();
+      });
     } catch (err) {
       console.error(err);
-      showNotification("Error al crear categoría.", "error");
+      Swal.fire("Error", "No se pudo crear la categoría.", "error");
     }
   });
 
@@ -147,7 +156,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       await apiRequest(`http://localhost:7000/api/categorias/${id}`, "PUT", { nombre, descripcion });
-      showNotification("Categoría editada correctamente.", "success");
       editModal.style.display = "none";
 
       // actualizar en memoria
@@ -157,9 +165,11 @@ document.addEventListener("DOMContentLoaded", () => {
         catData[index].descripcion = descripcion;
         renderTable(catData);
       }
+
+      Swal.fire("Éxito", "Categoría editada correctamente.", "success");
     } catch (err) {
       console.error(err);
-      showNotification("Error al editar categoría.", "error");
+      Swal.fire("Error", "No se pudo editar la categoría.", "error");
     }
   });
 

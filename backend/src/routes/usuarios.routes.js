@@ -14,7 +14,7 @@ router.post(
   UsuariosController.postUsuarios
 );
 router.delete("/:id",verificarToken, UsuariosController.deleteUsuarios);
-router.post("/login",verificarToken, UsuariosController.login);
+router.post("/login", UsuariosController.login);
 router.put("/:id", verificarToken,UsuariosController.putUsuarios);
 router.get("/:id"  ,verificarToken, UsuariosController.ObtenerUsuarioPorID);
 router.get("/nombre/usuario", verificarToken,UsuariosController.getNomUser);
